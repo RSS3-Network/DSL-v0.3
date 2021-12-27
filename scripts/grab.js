@@ -21,12 +21,10 @@ const fs = require('fs');
                 const data = json.response;
                 const historyData = JSON.parse(
                     fs.existsSync(HISTORY_DATA_FILE) ?
-                        fs.readFileSync(HISTORY_DATA_FILE).toString() : '[]',
+                        fs.readFileSync(HISTORY_DATA_FILE).toString() : '{}',
                 );
-                historyData.push({
-                    time: new Date().toISOString(),
-                    data,
-                });
+                const time = new Date().toISOString();
+                historyData[time] = data;
                 fs.writeFileSync(HISTORY_DATA_FILE, JSON.stringify(historyData));
             }
         });

@@ -6,7 +6,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/10 * * * *"
   repository_dispatch:
   workflow_dispatch:
 
