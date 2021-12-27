@@ -5,6 +5,7 @@ const DATA_ENDPOINT_OPTIONS = {
     method: 'GET'
 };
 
+const OVERALL_DATA_FILE = './statics/overall.json';
 const HISTORY_DATA_FILE = './statics/history.json';
 
 const https = require('https');
@@ -19,6 +20,7 @@ const fs = require('fs');
             const json = JSON.parse(rawData);
             if (json.code === 0) {
                 const data = json.response;
+                fs.writeFileSync(OVERALL_DATA_FILE, JSON.stringify(data));
                 const historyData = JSON.parse(
                     fs.existsSync(HISTORY_DATA_FILE) ?
                         fs.readFileSync(HISTORY_DATA_FILE).toString() : '{}',
