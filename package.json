@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "author": "NaturalSelectionLabs",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "11.0.0",
+    "mongodb": "4.3.0",
+    "node-cron": "3.0.0",
+    "nodegit": "0.27.0"
+  },
+  "devDependencies": {
+    "prettier": "2.3.0"
+  },
+  "scripts": {
+    "dev": "node src/index.js"
+  }
+}
