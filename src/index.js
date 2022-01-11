@@ -5,7 +5,7 @@ const { MongoClient, Db } = require('mongodb');
 
 require('dotenv').config();
 
-let conn;
+let conn, client;
 
 async function commitAndPush() {
     const repo = await nodegit.Repository.open('./');
@@ -35,7 +35,7 @@ async function commitAndPush() {
 }
 
 async function getConn() {
-    const client = await MongoClient.connect(process.env.MONGO_DB);
+    client = await MongoClient.connect(process.env.MONGO_DB);
     return client.db('rss3');
 }
 
@@ -85,9 +85,12 @@ function writeFiles(content) {
 }
 
 async function main() {
-    conn = await getConn();
-    await exportFiles();
-    await commitAndPush();
+    nodeCron.schedule('* 10 * * * *', async () => {
+        conn = await getConn();
+        await exportFiles();
+        await commitAndPush();
+        await client.close();
+    });
 }
 
 (async () => {
