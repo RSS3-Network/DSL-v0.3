@@ -1,17 +1,37 @@
 const fs = require('fs');
 const nodeCron = require('node-cron');
-const Git = require('nodegit');
+const nodegit = require('nodegit');
 const { MongoClient, Db } = require('mongodb');
 
 require('dotenv').config();
 
 let conn;
 
-// nodeCron.schedule('10 * * * * *', async () => {
-// });
+async function commitAndPush() {
+    const repo = await nodegit.Repository.open('./');
 
-async function commit() {
-    Git.Repository.open('./').then();
+    const index = await repo.refreshIndex();
+    await index.addAll();
+    await index.write();
+
+    const oid = await index.writeTree();
+    const parent = await repo.getHeadCommit();
+    const author = nodegit.Signature.now('RSS3 bot', 'contact@rss3.io');
+    const committer = nodegit.Signature.now('RSS3 bot', 'contact@rss3.io');
+
+    await repo.createCommit('HEAD', author, committer, ':zap: auto update rss3 statistics', oid, [parent]);
+
+    const remote = await repo.getRemote('origin');
+
+    remote.push(['refs/heads/dev:refs/heads/dev'], {
+        callbacks: {
+            credentials: function (url, userName) {
+                return nodegit.Cred.sshKeyFromAgent(userName);
+            },
+        },
+    });
+
+    console.log('Repo pushed at', new Date().toISOString());
 }
 
 async function getConn() {
@@ -20,21 +40,22 @@ async function getConn() {
 }
 
 async function exportFiles() {
-
     console.log('Export started at', new Date().toISOString());
 
     const collection = conn.collection('files');
 
     const files = await collection.find({ path: { $exists: true }, $where: 'this.path.length === 42' }).toArray();
 
-    files.forEach(async (file) => {
-        file = file.content;
+    await Promise.all(
+        files.map(async (file) => {
+            file = file.content;
 
-        delete file.items;
-        file.assets = await getAssets(file.id);
+            delete file.items;
+            file.assets = await getAssets(file.id);
 
-        writeFiles(file);
-    });
+            writeFiles(file);
+        }),
+    );
 
     console.log('Export finished at', new Date().toISOString());
 }
@@ -63,10 +84,15 @@ function writeFiles(content) {
     fs.writeFileSync(`${path}/${content.id}.json`, JSON.stringify(content));
 }
 
+async function main() {
+    conn = await getConn();
+    await exportFiles();
+    await commitAndPush();
+}
+
 (async () => {
     try {
-        conn = await getConn();
-        await exportFiles();
+        await main();
     } catch (e) {
         console.log(e);
     }
