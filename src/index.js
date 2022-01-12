@@ -48,12 +48,13 @@ async function exportFiles() {
 
     await Promise.all(
         files.map(async (file) => {
-            file = file.content;
+            const content = file.content;
 
-            delete file.items;
-            file.assets = await getAssets(file.id);
+            delete content.items;
 
-            writeFile(`storage/${file.id}.json`, content);
+            content.assets = await getAssets(content.id);
+
+            writeFile(`storage/${content.id}.json`, content);
         }),
     );
 
@@ -191,7 +192,7 @@ async function main() {
 
 (async () => {
     try {
-          await main();
+        await main();
     } catch (e) {
         console.log(e);
     }
