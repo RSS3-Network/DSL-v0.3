@@ -7,7 +7,7 @@ require('dotenv').config();
 
 let db, client;
 
-async function commitAndPush() {
+async function commit() {
     const repo = await nodegit.Repository.open('./');
 
     const index = await repo.refreshIndex();
@@ -21,17 +21,7 @@ async function commitAndPush() {
 
     await repo.createCommit('HEAD', author, committer, ':zap: auto update rss3 statistics', oid, [parent]);
 
-    const remote = await repo.getRemote('origin');
-
-    remote.push(['refs/heads/dev:refs/heads/dev'], {
-        callbacks: {
-            credentials: function (url, userName) {
-                return nodegit.Cred.sshKeyFromAgent(userName);
-            },
-        },
-    });
-
-    console.log('Repo pushed at', new Date().toISOString());
+    console.log('Commit created at', new Date().toISOString());
 }
 
 async function getConn() {
@@ -185,7 +175,7 @@ async function main() {
         db = await getConn();
         await exportFiles();
         await calStats();
-        await commitAndPush();
+        await commit();
         await client.close();
     });
 }
