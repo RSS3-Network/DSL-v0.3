@@ -1,3 +1,3 @@
 #!/bin/bash
 git push
-echo "yeah" >> push.log
+echo "yeah" >> ~/push.log
