@@ -1,4 +1,4 @@
-cd RSS3-PreNode-Data
+cd ~/RSS3-PreNode-Data
 
 node src/index.js
 
