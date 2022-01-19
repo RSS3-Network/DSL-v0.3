@@ -56,7 +56,7 @@ function writeFile(path, content) {
 }
 
 async function calStats() {
-    console.log('Stats started to compute at', new Date().toISOString());
+    console.log('Overall stats started to compute at', new Date().toISOString());
     const constructQueryForFollowing = (followRegex) => {
         return [
             { $match: { path: { $regex: followRegex }, 'content.list': { $exists: true } } },
@@ -141,14 +141,14 @@ async function calStats() {
         },
     };
 
-    const history = JSON.parse(fs.readFileSync('./statics/history.json').toString());
+    // const history = JSON.parse(fs.readFileSync('./statics/history.json').toString());
 
-    history[new Date().toISOString()] = response;
+    // history[new Date().toISOString()] = response;
 
-    writeFile(`./statics/history.json`, history);
+    // writeFile(`./statics/history.json`, history);
     writeFile(`./statics/overall.json`, response);
 
-    console.log('Stats computed at', new Date().toISOString());
+    console.log('Overall stats computed at', new Date().toISOString());
 }
 
 async function main() {

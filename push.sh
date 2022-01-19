@@ -4,9 +4,6 @@
 cd ~/RSS3-PreNode-Data
 node src/index.js
 
-# wait for mongodb pulling
-sleep 300
-
 # calculate stats
 cd statics
 
