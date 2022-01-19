@@ -1,28 +1,9 @@
 const fs = require('fs');
-const nodeCron = require('node-cron');
-const nodegit = require('nodegit');
 const { MongoClient } = require('mongodb');
 
 require('dotenv').config();
 
 let db, client;
-
-async function commit() {
-    const repo = await nodegit.Repository.open('./');
-
-    const index = await repo.refreshIndex();
-    await index.addAll();
-    await index.write();
-
-    const oid = await index.writeTree();
-    const parent = await repo.getHeadCommit();
-    const author = nodegit.Signature.now('RSS3 bot', 'contact@rss3.io');
-    const committer = nodegit.Signature.now('RSS3 bot', 'contact@rss3.io');
-
-    await repo.createCommit('HEAD', author, committer, ':zap: auto update rss3 statistics', oid, [parent]);
-
-    console.log('Commit created at', new Date().toISOString());
-}
 
 async function getConn() {
     client = await MongoClient.connect(process.env.MONGO_DB);
@@ -171,13 +152,10 @@ async function calStats() {
 }
 
 async function main() {
-    nodeCron.schedule('*/10 * * * *', async () => {
-        db = await getConn();
-        await exportFiles();
-        await calStats();
-        await commit();
-        await client.close();
-    });
+    db = await getConn();
+    await exportFiles();
+    await calStats();
+    await client.close();
 }
 
 (async () => {
