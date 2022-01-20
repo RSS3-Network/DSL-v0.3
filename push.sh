@@ -11,7 +11,7 @@ TIME=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
 VALUE=`cat ./overall.json`
 
 truncate -s-1 ./history.json
-echo ",\"$TIME\":$VALUE}" >> ./history.json
+printf ",\"$TIME\":$VALUE}" >> ./history.json
 
 # commit and push via git
 echo "push to git"
