@@ -29,6 +29,15 @@ async function exportFiles() {
         }),
     );
 
+    const backlinks = await collection.find({ path: /backlinks\.following\-[0-9]$/ }).toArray();
+
+    await Promise.all(
+        backlinks.map(async (file) => {
+            const content = file.content;
+            writeFile(`storage/${content.id}-backlink@following.json`, content);
+        }),
+    );
+
     console.log('Export finished at', new Date().toISOString());
 }
 
@@ -59,8 +68,15 @@ async function calStats() {
     console.log('Overall stats started to compute at', new Date().toISOString());
     const constructQueryForFollowing = (followRegex) => {
         return [
-            { $match: { path: { $regex: followRegex }, 'content.list': { $exists: true } } },
-            { $group: { _id: null, totalSize: { $sum: { $size: '$content.list' } } } },
+            {
+                $match: {
+                    path: { $regex: followRegex },
+                    'content.list': { $exists: true },
+                },
+            },
+            {
+                $group: { _id: null, totalSize: { $sum: { $size: '$content.list' } } },
+            },
         ];
     };
 
