@@ -15,25 +15,26 @@ async function exportFiles() {
 
     const collection = db.collection('files');
 
-    const files = await collection.find({ path: { $exists: true }, $where: 'this.path.length === 42' }).toArray();
+    // const files = await collection.find({ path: { $exists: true }, $where: 'this.path.length === 42' }).toArray();
 
-    await Promise.all(
-        files.map(async (file) => {
-            const content = file.content;
+    // await Promise.all(
+    //     files.map(async (file) => {
+    //         const content = file.content;
 
-            delete content.items;
+    //         delete content.items;
 
-            content.assets = await getAssets(content.id);
+    //         content.assets = await getAssets(content.id);
 
-            writeFile(`storage/${content.id}.json`, content);
-        }),
-    );
+    //         writeFile(`storage/${content.id}.json`, content);
+    //     }),
+    // );
 
-    const backlinks = await collection.find({ path: /backlinks\.following\-[0-9]$/ }).toArray();
+    const backlinks = await collection.find({ path: /backlinks\.following\-[0-9]$/ }).limit(10).toArray();
 
     await Promise.all(
         backlinks.map(async (file) => {
             const content = file.content;
+            console.log(content.id);
             writeFile(`storage/${content.id}-backlink@following.json`, content);
         }),
     );
