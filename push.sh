@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # trigger mongodb pulling
-cd ~/RSS3-PreNode-Data
 node --max-old-space-size=4096 src/index.js
 
 # calculate stats
