@@ -97,9 +97,5 @@ async function main() {
 }
 
 (async () => {
-    try {
-        await main();
-    } catch (e) {
-        console.log(e);
-    }
+    await main();
 })();
