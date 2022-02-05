@@ -50,6 +50,19 @@ async function exportFiles() {
                 list: assetsList,
             }));
 
+            assetsList.forEach((asset) => {
+                const platform = asset.split('-')[0];
+                const type = asset.split('-')[2];
+                if (!overall.assets[platform]) {
+                    overall.assets[platform] = {};
+                }
+                if (!overall.assets[platform][type]) {
+                    overall.assets[platform][type] = 0;
+                }
+                overall.assets[platform][type]++;
+                overall.assets.totalCount++;
+            });
+
             // count
             overall.count += 1;
 
@@ -61,19 +74,6 @@ async function exportFiles() {
                     overall.accounts[platform] = 0;
                 }
                 overall.accounts[platform]++;
-            });
-        } else if (file.path.split('-')[2]?.startsWith('assets')) {
-            file.content.list?.forEach((asset) => {
-                const platform = asset.split('-')[0];
-                const type = asset.split('-')[2];
-                if (!overall.assets[platform]) {
-                    overall.assets[platform] = {};
-                }
-                if (!overall.assets[platform][type]) {
-                    overall.assets[platform][type] = 0;
-                }
-                overall.assets[platform][type]++;
-                overall.assets.totalCount++;
             });
         } else if (file.path.split('-')[2]?.startsWith('links')) {
             const type = file.path.split('-')[2].split('.')[1];
