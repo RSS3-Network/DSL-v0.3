@@ -23,3 +23,5 @@ jobs:
 
       - name: Run push.sh
         run: ./push.sh
+        env:
+          MONGO_DB: ${{ secrets.MONGO_DB }}
