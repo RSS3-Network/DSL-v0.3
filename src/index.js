@@ -29,7 +29,7 @@ async function exportFiles() {
         },
     }
 
-    await Promise.all(files.map(async (file, index) => {
+    files.forEach(async (file, index) => {
         if (index % 1000 === 0) {
             console.log(`Export ${index} files`);
         }
@@ -41,7 +41,7 @@ async function exportFiles() {
             const assetsList = assets.filter((list) => accounts.includes(list.path)).reduce((acc, cur) => acc.concat(cur.content), []);
             const now = new Date().toISOString();
 
-            await fs.promises.writeFile(`storage/${file.path}-list-assets.auto-0`, JSON.stringify({
+            await fs.writeFileSync(`storage/${file.path}-list-assets.auto-0`, JSON.stringify({
                 id: `${file.path}-list-assets.auto-0`,
                 version: file.content.version,
                 date_created: now,
@@ -82,8 +82,8 @@ async function exportFiles() {
             }
             overall.links[type] += file.content.list?.length || 0;
         }
-        await fs.promises.writeFile(`storage/${file.path}`, JSON.stringify(file.content));
-    }));
+        await fs.writeFileSync(`storage/${file.path}`, JSON.stringify(file.content));
+    });
     
     fs.writeFileSync('./statics/overall.json', JSON.stringify(overall));
 
