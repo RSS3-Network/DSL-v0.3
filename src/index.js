@@ -41,14 +41,22 @@ async function exportFiles() {
             const assetsList = assets.filter((list) => accounts.includes(list.path)).reduce((acc, cur) => acc.concat(cur.content), []);
             const now = new Date().toISOString();
 
-            fs.writeFileSync(`storage/${file.path}-list-assets.auto-0`, JSON.stringify({
-                id: `${file.path}-list-assets.auto-0`,
-                version: file.content.version,
-                date_created: now,
-                date_updated: now,
-                auto: true,
-                list: assetsList,
-            }));
+            let oldList = [];
+            try {
+                oldList = JSON.parse(fs.readFileSync(`storage/${file.path}-list-assets.auto-0`)).list;
+            } catch (e) {
+                oldList = [];
+            }
+            if (JSON.stringify(oldList.sort()) !== JSON.stringify(assetsList.sort())) {
+                fs.writeFileSync(`storage/${file.path}-list-assets.auto-0`, JSON.stringify({
+                    id: `${file.path}-list-assets.auto-0`,
+                    version: file.content.version,
+                    date_created: now,
+                    date_updated: now,
+                    auto: true,
+                    list: assetsList,
+                }));
+            }
 
             assetsList.forEach((asset) => {
                 const platform = asset.split('-')[0];
