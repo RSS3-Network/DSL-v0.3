@@ -9,7 +9,7 @@
 
 Synchronize data from RSS3 Network every 30 minutes
 
-![Version](https://shields.io/badge/Version-v0.3.1-0072ff?style=flat-square) ![RSS3](https://ipfs.rss3.page/ipfs/QmePwn2TTaaZ6ezYFQB4XfohULEFxcqBvLmm3N3tLZMvRG) [![Push](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml/badge.svg)](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml)
+[![RSS3](https://badge.rss3.workers.dev/?version=v0.3.1)](https://github.com/NaturalSelectionLabs/RSS3/blob/main/versions/v0.3.1.md) [![Push](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml/badge.svg)](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml)
 
 **View [all RSS3 files](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/tree/main/storage)**
 
