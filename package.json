@@ -4,7 +4,8 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "11.0.0",
-    "mongodb": "4.3.0"
+    "mongodb": "4.3.0",
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "prettier": "2.3.0"

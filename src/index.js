@@ -1,9 +1,10 @@
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
+const { Client: PgClient } = require('pg');
 
 require('dotenv').config();
 
-let db, client;
+let db, client, pg;
 
 async function getConn() {
     client = await MongoClient.connect(process.env.MONGO_DB);
@@ -12,6 +13,8 @@ async function getConn() {
 
 async function exportFiles() {
     console.log('Export started at', new Date().toISOString());
+
+    const { rows: items } = await pg.query('SELECT type, COUNT(*) as amount FROM "RSS3Item" GROUP BY "type"');
 
     const files = await db.collection('files').find().toArray();
     console.log('Files length ', files.length);
@@ -27,7 +30,18 @@ async function exportFiles() {
         accounts: {
             'EVM+': 0,
         },
+        items: {
+            totalCount: 0,
+        },
     }
+
+    items.forEach(item => {
+        if (item.type) {
+            const amount = parseInt(item.amount);
+            overall.items[item.type] = amount;
+            overall.items.totalCount += amount;
+        }
+    })
 
     files.forEach((file, index) => {
         if (index % 1000 === 0) {
@@ -100,8 +114,19 @@ async function exportFiles() {
 
 async function main() {
     db = await getConn();
+
+    pg = new PgClient({
+        user: process.env.PG_USER,
+        host: process.env.PG_HOST,
+        database: process.env.PG_DB_PROD,
+        password: process.env.PG_PASSWORD,
+        port: process.env.PG_PORT,
+    });
+    await pg.connect();
+
     await exportFiles();
     await client.close();
+    await pg.end()
 }
 
 (async () => {
