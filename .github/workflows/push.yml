@@ -25,3 +25,8 @@ jobs:
         run: ./push.sh
         env:
           MONGO_DB: ${{ secrets.MONGO_DB }}
+          PG_HOST: ${{ secrets.PG_HOST }}
+          PG_PORT: ${{ secrets.PG_PORT }}
+          PG_USER: ${{ secrets.PG_USER }}
+          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+          PG_DB_PROD: ${{ secrets.PG_DB_PROD }}
