@@ -7,7 +7,7 @@
     </p>
 </p>
 
-Synchronize data from RSS3 Network every 30 minutes
+Synchronize data from RSS3 Network every 1 hour.
 
 [![RSS3](https://badge.rss3.workers.dev/?version=v0.3.1)](https://github.com/NaturalSelectionLabs/RSS3/blob/main/versions/v0.3.1.md) [![Push](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml/badge.svg)](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml)
 
