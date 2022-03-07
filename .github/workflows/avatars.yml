@@ -1,0 +1,34 @@
+name: "Avatars"
+
+on:
+  schedule:
+    -   cron: "0 0 * * *"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    name: Avatars
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Setup dependencies
+        run: yarn
+
+      - name: Run avatars.js
+        run: ./src/avatars.js
+
+      - name: Run avatars.sh
+        run: ./src/avatars.sh
+
+      - name: Push
+        run: |
+          git config user.name "RSS3 Bot"
+          git config user.email "contact@rss3.io"
+          git pull
+          git add -A
+          git commit -m ':stars: auto update rss3 avatars'
+          git push

@@ -1,0 +1,65 @@
+const https = require('https');
+const fs = require('fs');
+
+let avatars = 0;
+
+const files = fs.readdirSync('./storage');
+try {
+    fs.mkdirSync('./images');
+} catch (error) {}
+
+let index = -1;
+
+(async () => {
+    for (let i = 0; i < files.length; i++) {
+        const fileName = files[i];
+        if (fileName.split('-').length === 1) {
+            const content = fs.readFileSync('./storage/' + fileName);
+            try {
+                const file = JSON.parse(content);
+                if (file.profile?.avatar?.length && file.profile.avatar[0] !== 'https://infura-ipfs.io/ipfs/QmcK8FSTtLQVydLEDKLv1hEacLxZgi7j2i4mkQQMyKxv6k') {
+                    avatars++;
+                    let avatar = file.profile.avatar[0];
+                    if (avatar.startsWith('ipfs://')) {
+                        avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
+                    }
+
+                    https.get(avatar, (response) => {
+                        if (response.statusCode !== 200) {
+                            console.log('error', index, avatar, response.statusCode);
+                            return;
+                        }
+                        const current = ++index;
+                        const page = Math.floor(current / 100);
+                        try {
+                            fs.mkdirSync('./images/' + page);
+                        } catch (error) {}
+                        console.log('download', current, avatar, `${i}/${files.length}`);
+                        let name = './images/' + page + '/' + current;
+                        switch (response.headers['content-type']) {
+                            case 'image/jpeg':
+                                name += '.jpg';
+                                break;
+                            case 'image/png':
+                                name += '.jpg';
+                                break;
+                            case 'image/webp':
+                                name += '.webp';
+                                break;
+                            case 'image/gif':
+                                console.log('unsupported type', current, avatar, response.headers['content-type']);
+                                return;
+                            default:
+                                console.log('unknown type', current, avatar, response.headers['content-type']);
+                                return;
+                        }
+                        response.pipe(fs.createWriteStream(name));
+                    });
+                }
+            } catch (error) {
+                console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
+            }
+        }
+        await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+})();

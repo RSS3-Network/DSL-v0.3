@@ -22,7 +22,7 @@ jobs:
         run: yarn
 
       - name: Run push.sh
-        run: ./push.sh
+        run: ./src/push.sh
         env:
           MONGO_DB: ${{ secrets.MONGO_DB }}
           PG_HOST: ${{ secrets.PG_HOST }}

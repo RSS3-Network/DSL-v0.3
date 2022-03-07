@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # trigger mongodb pulling
-node --max-old-space-size=4096 src/index.js
+node --max-old-space-size=4096 src/push.js
 
 # calculate stats
 cd statics
