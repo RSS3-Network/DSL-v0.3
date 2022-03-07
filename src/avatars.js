@@ -5,7 +5,8 @@ let avatars = 0;
 
 const files = fs.readdirSync('./storage');
 try {
-    fs.mkdirSync('./images');
+    fs.mkdirSync('./tmp');
+    fs.mkdirSync('./tmp/images');
 } catch (error) {}
 
 let index = -1;
@@ -32,32 +33,41 @@ let index = -1;
                                 resolve();
                                 return;
                             }
-                            const current = ++index;
-                            const page = Math.floor(current / 100);
-                            try {
-                                fs.mkdirSync('./images/' + page);
-                            } catch (error) {}
-                            console.log('download', current, avatar, `${i}/${files.length}`);
-                            let name = './images/' + page + '/' + fileName;
+                            let postfix = '';
                             switch (response.headers['content-type']) {
                                 case 'image/jpeg':
-                                    name += '.jpg';
+                                    postfix = '.jpg';
                                     break;
                                 case 'image/png':
-                                    name += '.jpg';
+                                    postfix = '.jpg';
                                     break;
                                 case 'image/webp':
-                                    name += '.webp';
+                                    postfix = '.webp';
+                                    break;
+                                case 'image/bmp':
+                                    postfix = '.bmp';
+                                    break;
+                                case 'image/svg+xml':
+                                    postfix = '.svg';
+                                    break;
+                                case 'image/x-icon':
+                                    postfix = '.icon';
                                     break;
                                 case 'image/gif':
-                                    console.log('unsupported type', current, avatar, response.headers['content-type']);
-                                    resolve();
-                                    return;
+                                    postfix = '.gif';
+                                    break;
                                 default:
-                                    console.log('unknown type', current, avatar, response.headers['content-type']);
+                                    console.log('unknown type', index, avatar, response.headers['content-type']);
                                     resolve();
                                     return;
                             }
+                            const current = ++index;
+                            const page = Math.floor(current / 100);
+                            try {
+                                fs.mkdirSync('./tmp/images/' + page);
+                            } catch (error) {}
+                            console.log('download', current, avatar, `${i}/${files.length}`);
+                            let name = './tmp/images/' + page + '/' + fileName + postfix;
                             response.pipe(fs.createWriteStream(name));
                             resolve();
                         });

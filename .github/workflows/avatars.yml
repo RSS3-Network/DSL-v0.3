@@ -19,9 +19,6 @@ jobs:
       - name: Setup dependencies
         run: yarn
 
-      - name: Run avatars.js
-        run: node ./src/avatars.js
-
       - name: Run avatars.sh
         run: sh ./src/avatars.sh
 
