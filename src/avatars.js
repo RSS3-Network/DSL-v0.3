@@ -24,7 +24,7 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
-                    https.get(avatar, (response) => {
+                    const req = https.get(avatar, (response) => {
                         if (response.statusCode !== 200) {
                             console.log('error', index, avatar, response.statusCode);
                             return;
@@ -55,11 +55,14 @@ let index = -1;
                         }
                         response.pipe(fs.createWriteStream(name));
                     });
+                    req.on('error', (err) => {
+                        console.log('error', err.message);
+                    });
                 }
             } catch (error) {
                 console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
             }
         }
-        await new Promise((resolve) => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 5));
     }
 })();
