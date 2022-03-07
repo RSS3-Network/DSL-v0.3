@@ -27,13 +27,7 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
-                    const urlObject = url.parse(avatar);
-                    const req = https.get({
-                        hostname: urlObject.hostname,
-                        path: urlObject.path,
-                        protocol: urlObject.protocol,
-                        timeout: 5000,
-                    }, (response) => {
+                    const req = https.get(avatar, (response) => {
                         if (response.statusCode !== 200) {
                             console.log('error', index, avatar, response.statusCode);
                             return;
