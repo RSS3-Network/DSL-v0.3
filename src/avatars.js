@@ -1,6 +1,5 @@
 const https = require('https');
 const fs = require('fs');
-const url = require('url');
 
 https.globalAgent.maxSockets = 5;
 
@@ -27,6 +26,7 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
+                    console.log('start', `${i}/${files.length}`);
                     const req = https.get(avatar, (response) => {
                         if (response.statusCode !== 200) {
                             console.log('error', index, avatar, response.statusCode);
@@ -66,6 +66,6 @@ let index = -1;
                 console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
             }
         }
-        await new Promise((resolve) => setTimeout(resolve, 5));
+        await new Promise((resolve) => setTimeout(resolve, 100));
     }
 })();
