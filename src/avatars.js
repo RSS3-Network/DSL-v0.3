@@ -1,6 +1,8 @@
 const https = require('https');
 const fs = require('fs');
 
+https.globalAgent.maxSockets = 5;
+
 let avatars = 0;
 
 const files = fs.readdirSync('./storage');
@@ -57,6 +59,12 @@ let index = -1;
                     });
                     req.on('error', (err) => {
                         console.log('error', err.message);
+                    });
+                    req.on('socket', (socket) => {
+                        socket.setTimeout(5000);  
+                        socket.on('timeout', function() {
+                            req.destroy();
+                        });
                     });
                 }
             } catch (error) {
