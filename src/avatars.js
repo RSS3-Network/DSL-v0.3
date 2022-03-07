@@ -35,7 +35,7 @@ let index = -1;
                             fs.mkdirSync('./images/' + page);
                         } catch (error) {}
                         console.log('download', current, avatar, `${i}/${files.length}`);
-                        let name = './images/' + page + '/' + current;
+                        let name = './images/' + page + '/' + fileName;
                         switch (response.headers['content-type']) {
                             case 'image/jpeg':
                                 name += '.jpg';
