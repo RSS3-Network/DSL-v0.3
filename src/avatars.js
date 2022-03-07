@@ -26,7 +26,10 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
-                    const req = https.get(avatar, (response) => {
+                    const req = https.get({
+                        url: avatar,
+                        timeout: 5000,
+                    }, (response) => {
                         if (response.statusCode !== 200) {
                             console.log('error', index, avatar, response.statusCode);
                             return;
@@ -59,12 +62,6 @@ let index = -1;
                     });
                     req.on('error', (err) => {
                         console.log('error', err.message);
-                    });
-                    req.on('socket', (socket) => {
-                        socket.setTimeout(5000);  
-                        socket.on('timeout', function() {
-                            req.destroy();
-                        });
                     });
                 }
             } catch (error) {
