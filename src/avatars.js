@@ -62,7 +62,7 @@ let index = -1;
                                     return;
                             }
                             const current = ++index;
-                            const page = Math.floor(current / 100);
+                            const page = (Math.floor(current / 100) + '').padStart(4, '0');
                             try {
                                 fs.mkdirSync('./tmp/images/' + page);
                             } catch (error) {}
@@ -78,7 +78,7 @@ let index = -1;
                         setTimeout(() => {
                             req.destroy();
                             resolve();
-                        }, 5000);
+                        }, 30000);
                     });
                 }
             } catch (error) {
