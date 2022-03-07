@@ -1,8 +1,6 @@
 const https = require('https');
 const fs = require('fs');
 
-https.globalAgent.maxSockets = 5;
-
 let avatars = 0;
 
 const files = fs.readdirSync('./storage');
@@ -61,11 +59,11 @@ let index = -1;
                     req.on('error', (err) => {
                         console.log('error', err.message);
                     });
+                    await new Promise((resolve) => setTimeout(resolve, 100));
                 }
             } catch (error) {
                 console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
             }
         }
-        await new Promise((resolve) => setTimeout(resolve, 100));
     }
 })();
