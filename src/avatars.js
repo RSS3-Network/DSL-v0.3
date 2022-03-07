@@ -1,5 +1,6 @@
 const https = require('https');
 const fs = require('fs');
+const url = require('url');
 
 https.globalAgent.maxSockets = 5;
 
@@ -26,8 +27,11 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
+                    const urlObject = url.parse(avatar);
                     const req = https.get({
-                        url: avatar,
+                        hostname: urlObject.hostname,
+                        path: urlObject.path,
+                        protocol: urlObject.protocol,
                         timeout: 5000,
                     }, (response) => {
                         if (response.statusCode !== 200) {
