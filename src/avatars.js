@@ -60,6 +60,6 @@ let index = -1;
                 console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
             }
         }
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 10));
     }
 })();
