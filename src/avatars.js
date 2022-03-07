@@ -24,42 +24,52 @@ let index = -1;
                         avatar = avatar.replace('ipfs://', 'https://rss3.mypinata.cloud/ipfs/');
                     }
 
-                    console.log('start', `${i}/${files.length}`);
-                    const req = https.get(avatar, (response) => {
-                        if (response.statusCode !== 200) {
-                            console.log('error', index, avatar, response.statusCode);
-                            return;
-                        }
-                        const current = ++index;
-                        const page = Math.floor(current / 100);
-                        try {
-                            fs.mkdirSync('./images/' + page);
-                        } catch (error) {}
-                        console.log('download', current, avatar, `${i}/${files.length}`);
-                        let name = './images/' + page + '/' + fileName;
-                        switch (response.headers['content-type']) {
-                            case 'image/jpeg':
-                                name += '.jpg';
-                                break;
-                            case 'image/png':
-                                name += '.jpg';
-                                break;
-                            case 'image/webp':
-                                name += '.webp';
-                                break;
-                            case 'image/gif':
-                                console.log('unsupported type', current, avatar, response.headers['content-type']);
+                    await new Promise((resolve) => {
+                        console.log('start', `${i}/${files.length}`);
+                        const req = https.get(avatar, (response) => {
+                            if (response.statusCode !== 200) {
+                                console.log('error', index, avatar, response.statusCode);
+                                resolve();
                                 return;
-                            default:
-                                console.log('unknown type', current, avatar, response.headers['content-type']);
-                                return;
-                        }
-                        response.pipe(fs.createWriteStream(name));
+                            }
+                            const current = ++index;
+                            const page = Math.floor(current / 100);
+                            try {
+                                fs.mkdirSync('./images/' + page);
+                            } catch (error) {}
+                            console.log('download', current, avatar, `${i}/${files.length}`);
+                            let name = './images/' + page + '/' + fileName;
+                            switch (response.headers['content-type']) {
+                                case 'image/jpeg':
+                                    name += '.jpg';
+                                    break;
+                                case 'image/png':
+                                    name += '.jpg';
+                                    break;
+                                case 'image/webp':
+                                    name += '.webp';
+                                    break;
+                                case 'image/gif':
+                                    console.log('unsupported type', current, avatar, response.headers['content-type']);
+                                    resolve();
+                                    return;
+                                default:
+                                    console.log('unknown type', current, avatar, response.headers['content-type']);
+                                    resolve();
+                                    return;
+                            }
+                            response.pipe(fs.createWriteStream(name));
+                            resolve();
+                        });
+                        req.on('error', (err) => {
+                            console.log('error', err.message);
+                            resolve();
+                        });
+                        setTimeout(() => {
+                            req.destroy();
+                            resolve();
+                        }, 5000);
                     });
-                    req.on('error', (err) => {
-                        console.log('error', err.message);
-                    });
-                    await new Promise((resolve) => setTimeout(resolve, 100));
                 }
             } catch (error) {
                 console.error(`Error: fileName: ${fileName} content: ${content} error: ${error}`);
