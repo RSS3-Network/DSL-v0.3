@@ -1,20 +1,27 @@
+<!-- markdownlint-disable -->
 <p align="center">
-    <p align="center">
-        <img src="https://graphics.rss3.workers.dev/" alt="RSS3" width="100">
-    </p>
-    <p align="center">
-        <img src="https://rss3.mypinata.cloud/ipfs/QmUG6H3Z7D5P511shn7sB4CPmpjH5uZWu4m5mWX7U3Gqbu" alt="RSS3" width="150">
-    </p>
+  <a href="https://rss3.io" target="_blank" rel="noopener noreferrer">
+    <!-- RSS3 White logo, used the hosting for an absolute link -->
+    <img width="180" src="https://cdn.jsdelivr.net/gh/rss3-network/rss3-assets/logo.svg" alt="RSS3 logo">
+  </a>
 </p>
+<p align="center">
+  <a href="https://link.rss3.io/x"><img src="https://img.shields.io/twitter/follow/rss3_?color=%230072ff" alt="follow RSS3 on X"></a>
+  <a href="https://link.rss3.io/discord"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord&color=%230072ff" alt="Join RSS3 Discord"></a>
+  <!-- add NPM and other badges when needed -->
+</p>
+<!-- markdownlint-enable -->
 
-Synchronize data from RSS3 Network every 1 hour.
+# RSS3 Data Sublayer v0.3
 
-[![RSS3](https://badge.rss3.workers.dev/?version=v0.3.1)](https://github.com/NaturalSelectionLabs/RSS3/blob/main/versions/v0.3.1.md) [![Push](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml/badge.svg)](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/actions/workflows/push.yml)
+The RSS3 Data Sublayer (DSL) v0.3 was a version that served the RSS3 Network Testnet between late 2021 and Oct 2022.
 
-**View [all RSS3 files](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/tree/main/storage)**
+The development and operation of this version provided invaluable practical experience that the RSS3 engineers leveraged for enhancing future iterations.
 
-**View [RSS3 statistics data](https://github.com/NaturalSelectionLabs/RSS3-Network-Data/tree/main/statics)**
+It is no longer being maintained and has been superseded by the subsequent DSL versions.
 
-Archive for older versions
+## License
 
-- [v0.2.0](https://github.com/NaturalSelectionLabs/RSS3-Network-Data-v0.2.0)
+<!-- We use MIT as it's almost unrestricted. -->
+
+[MIT](LICENSE).
